@@ -1,0 +1,33 @@
+<script>
+    function updateThreshold(amount){
+        var sliderDiv = document.getElementsByName("thresholdAmount");
+        sliderDiv.innerHTML = amount;
+        
+    };
+</script>
+{%block body%}
+    <div>
+    <h1>Processing</h1>
+    <div class="jumbotron">
+        <div id="image-container">
+           <img src=" {{url_for('send_image', filename=image_name)}} " style="max-width: 560px;">
+           </div>
+         </div>
+    </div>
+    <div>
+        <h1>Thresholding</h1>
+        <div class="slidecontainer">
+            <input name='thresholdSlider' onchange="updateThreshold(this.value)" type="range" min="0" max="255" value="50" class="slider" id="myRange">
+            <div id="thresholdAmount"></div>         
+          </div>
+        <h1>Gray Scale</h1>
+        <div class="greyscale">
+            <form id="grayscale-form" action="{{ url_for('grayscale') }}" method="post" enctype="multipart/form-data">
+                <input type="radio" id='gray' name='grayradio' value="Change to grayscale">
+                <input type="text" class="hidden" name="image" value="{{ image_name}}">   
+                <input type='submit'> 
+            </form>  
+        </div>
+        
+    </div>
+{%endblock body %}

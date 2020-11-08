@@ -1,0 +1,8 @@
+{% include "index.html" %}
+{%block body%}
+<div class="jumbotron">
+    <div id="image-container">
+       <img src=" {{url_for('send_image', filename=image_name)}} " style="max-width: 560px;">
+    </div>
+</div>
+{%endblock body%}
