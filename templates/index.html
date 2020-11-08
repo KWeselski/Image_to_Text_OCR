@@ -19,12 +19,27 @@
           <canvas id="canvasOutput" ></canvas>
           <div class="caption">canvasOutput</div>
         </div>
+        <div>
+          <button onclick="changeToGray()">Change to Gray</button>
+        </div>
+        <div class="inputoutput">
+          <canvas id="threshOutput" ></canvas>
+          <div class="caption">threshOutput</div>
+        </div>
+    </div>
+    
+    <div>
+      Threshold type <select id="thresh_type" name="thresh_type"">
+        <option value="THRESH_BINARY">THRESH_BINARY</option>
+        <option value="THRESH_BINARY_INV">THRESH_BINARY_INV</option>
+        <option value="THRESH_TRUNC">THRESH_TRUNC</option>
+        <option value="THRESH_TRIANGLE">THRESH_TRIANGLE</option>
+        <option value="THRESH_TOZERO">THRESH_TOZERO</option>
+        <option value="THRESH_OTSU">THRESH_OTSU</option>
+      </select>
     </div>
     <div>
-      <button onclick="changeToGray()">Change to Gray</button>
-    </div>
-    <div>
-      Treshold: <input type="range" id="trackbar" value="50" min="0" max="255" step="1" oninput="callback()">
+      Threshold: <input type="range" id="trackbar" value="50" min="0" max="255" step="1" oninput="callback()">
       <input type="text" id="weightValue" size="3" value="50"/>
     </div>
     <div>
@@ -42,15 +57,24 @@
     let x = document.createElement('INPUT');
     x.setAttribute('type','range');
 
+   // var threshTypes = {};
+  //  threshTypes['THRESH_BINARY'] = cv.THRESH_BINARY;
+   // threshTypes['THRESH_BINARY_INV'] = cv.THRESH_BINARY_INV;
+   // threshTypes['THRESH_TRUNC'] = cv.THRESH_TRUNC;
+  //  threshTypes['THRESH_TOZERO'] = cv.THRESH_TOZERO;
+  //  threshTypes['THRESH_OTSU'] = cv.THRESH_OTSU;
+  //  threshTypes['THRESH_TRIANGLE'] = cv.THRESH_TRIANGLE;
    
     imgElement.onload = function() {
       let mat = cv.imread(imgElement);
       cv.imshow('canvasOutput', mat);
       mat.delete();
     };
+
     function onOpenCvReady() {
       document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
-    }
+    };
+
     function changeToGray() {  
       let src = cv.imread('imageSrc');
       let dst = new cv.Mat(); 
@@ -59,13 +83,64 @@
       src.delete();dst.delete(); 
     };
  
-    function thresholding() {
-      let src = cv.imread('imageSrc');
+    function thresh_binary() {
+      let src = cv.imread('canvasOutput');
       let dst = new cv.Mat();
       let weightValue = document.getElementById('weightValue');
       let value = weightValue.getAttribute('value');
       cv.threshold(src, dst,parseInt(value), 255, cv.THRESH_BINARY);
-      cv.imshow('canvasOutput', dst);
+      cv.imshow('threshOutput', dst);
+      src.delete();
+      dst.delete();
+    };
+    function thresh_binary_inv(){
+      let src = cv.imread('canvasOutput');
+      let dst = new cv.Mat();
+      let weightValue = document.getElementById('weightValue');
+      let value = weightValue.getAttribute('value');
+      cv.threshold(src, dst,parseInt(value), 255, cv.THRESH_BINARY_INV);
+      cv.imshow('threshOutput', dst);
+      src.delete();
+      dst.delete();
+    };
+
+    function thresh_trunc(){
+      let src = cv.imread('canvasOutput');
+      let dst = new cv.Mat();
+      let weightValue = document.getElementById('weightValue');
+      let value = weightValue.getAttribute('value');
+      cv.threshold(src, dst,parseInt(value), 255, cv.THRESH_TRUNC);
+      cv.imshow('threshOutput', dst);
+      src.delete();
+      dst.delete();   
+    };
+    function thresh_tozero(){
+      let src = cv.imread('canvasOutput');
+      let dst = new cv.Mat();
+      let weightValue = document.getElementById('weightValue');
+      let value = weightValue.getAttribute('value');
+      cv.threshold(src, dst,parseInt(value), 255, cv.THRESH_TOZERO);
+      cv.imshow('threshOutput', dst);
+      src.delete();
+      dst.delete();
+    };
+    function thresh_otsu(){
+      let src = cv.imread('canvasOutput');
+      let dst = new cv.Mat();
+      let weightValue = document.getElementById('weightValue');
+      let value = weightValue.getAttribute('value');
+      cv.threshold(src, dst,parseInt(value), 255,cv.THRESH_BINARY & cv.THRESH_OTSU);
+      cv.imshow('threshOutput', dst);
+      src.delete();
+      dst.delete();
+    };
+    function thresh_triangle(){
+      let src = cv.imread('canvasOutput');
+      let dst = new cv.Mat();
+      let weightValue = document.getElementById('weightValue');
+      let value = weightValue.getAttribute('value');
+      cv.threshold(src, dst,parseInt(value), 255, cv.THRESH_BINARY & cv.THRESH_TRIANGLE);
+      cv.imshow('threshOutput', dst);
       src.delete();
       dst.delete();
     };
@@ -74,9 +149,27 @@
       let weightValue  = document.getElementById('weightValue');
       let trackbar = document.getElementById('trackbar');
       weightValue.setAttribute('value', trackbar.value);
-      thresholding();
-    }
-
+      let thresh_type = document.getElementById('thresh_type')
+      let selOpt = thresh_type.options[thresh_type.selectedIndex].value;
+      if (selOpt == 'THRESH_BINARY'){
+        thresh_binary();
+      }
+      else if(selOpt == 'THRESH_BINARY_INV'){
+        thresh_binary_inv();
+      }
+      else if(selOpt == 'THRESH_TRUNC'){
+        thresh_trunc();
+      }
+      else if(selOpt == 'THRESH_TOZERO'){
+        thresh_tozero();
+      }
+      else if(selOpt == 'THRESH_OTSU'){
+        thresh_otsu();
+      }
+      else if(selOpt == 'THRESH_TRIANGLE'){
+        thresh_triangle();
+      }
+    };
 
 
 </script>
