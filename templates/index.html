@@ -36,6 +36,8 @@
         <option value="THRESH_TRIANGLE">THRESH_TRIANGLE</option>
         <option value="THRESH_TOZERO">THRESH_TOZERO</option>
         <option value="THRESH_OTSU">THRESH_OTSU</option>
+        <option value="THRESH_ADAPTIVE_MEAN">THRESH_ADAPTIVE_MEAN</option>
+        <option value="THRESH_ADAPTIVE_GAUSSIAN">THRESH_ADAPTIVE_GAUSSIAN</option>
       </select>
     </div>
     <div>
@@ -78,7 +80,7 @@
     function changeToGray() {  
       let src = cv.imread('imageSrc');
       let dst = new cv.Mat(); 
-      cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
+      cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY,0);
       cv.imshow('canvasOutput', dst);
       src.delete();dst.delete(); 
     };
@@ -127,22 +129,42 @@
     function thresh_otsu(){
       let src = cv.imread('canvasOutput');
       let dst = new cv.Mat();
-      let weightValue = document.getElementById('weightValue');
-      let value = weightValue.getAttribute('value');
-      cv.threshold(src, dst,parseInt(value), 255,cv.THRESH_BINARY & cv.THRESH_OTSU);
-      cv.imshow('threshOutput', dst);
-      src.delete();
-      dst.delete();
+      let gray = new cv.Mat();
+      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY, 0);
+      cv.threshold(gray, gray,0, 255,cv.THRESH_BINARY_INV + cv.THRESH_OTSU);
+      cv.imshow('threshOutput', gray);
+      src.delete();dst.delete();gray.delete();
     };
     function thresh_triangle(){
       let src = cv.imread('canvasOutput');
       let dst = new cv.Mat();
+      let gray = new cv.Mat();
+      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY, 0);
+      cv.threshold(gray, gray,0, 255, cv.THRESH_BINARY_INV + cv.THRESH_TRIANGLE);
+      cv.imshow('threshOutput', gray);
+      src.delete();dst.delete();gray.delete();
+    };
+    function thresh_adaptive_g(){
+      let src = cv.imread('canvasOutput');
+      let dst = new cv.Mat();
       let weightValue = document.getElementById('weightValue');
       let value = weightValue.getAttribute('value');
-      cv.threshold(src, dst,parseInt(value), 255, cv.THRESH_BINARY & cv.THRESH_TRIANGLE);
-      cv.imshow('threshOutput', dst);
-      src.delete();
-      dst.delete();
+      let gray = new cv.Mat();
+      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY, 0);
+      cv.adaptiveThreshold(gray, gray,parseInt(value),cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 3, 2);
+      cv.imshow('threshOutput', gray);
+      src.delete();dst.delete();gray.delete();
+    };
+    function thresh_adaptive_m(){
+      let src = cv.imread('canvasOutput');
+      let dst = new cv.Mat();
+      let weightValue = document.getElementById('weightValue');
+      let value = weightValue.getAttribute('value');
+      let gray = new cv.Mat();
+      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY, 0);
+      cv.adaptiveThreshold(gray, gray,parseInt(value),cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, 3, 2);
+      cv.imshow('threshOutput', gray);
+      src.delete();dst.delete();gray.delete();
     };
 
     function callback() {
@@ -168,6 +190,12 @@
       }
       else if(selOpt == 'THRESH_TRIANGLE'){
         thresh_triangle();
+      }
+      else if(selOpt == 'THRESH_ADAPTIVE_GAUSSIAN'){
+        thresh_adaptive_g();
+      }
+      else if(selOpt == 'THRESH_ADAPTIVE_MEAN'){
+        thresh_adaptive_m();
       }
     };
 
