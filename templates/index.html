@@ -1,206 +1,174 @@
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OCR</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-</head>
-<body>
-    <div>
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-        <h1>Scan Image</h1>
-        <div class="inputoutput">
-          <img id="imageSrc" alt="No Image" />
-          <div class="caption">imageSrc <input type="file" id="fileInput" name="file" /></div>
-        </div>
-        <div class="inputoutput">
-          <canvas id="canvasOutput" ></canvas>
-          <div class="caption">canvasOutput</div>
-        </div>
-        <div>
-          <button onclick="changeToGray()">Change to Gray</button>
-        </div>
-        <div class="inputoutput">
-          <canvas id="threshOutput" ></canvas>
-          <div class="caption">threshOutput</div>
-        </div>
-    </div>
-    
-    <div>
-      Threshold type <select id="thresh_type" name="thresh_type"">
-        <option value="THRESH_BINARY">THRESH_BINARY</option>
-        <option value="THRESH_BINARY_INV">THRESH_BINARY_INV</option>
-        <option value="THRESH_TRUNC">THRESH_TRUNC</option>
-        <option value="THRESH_TRIANGLE">THRESH_TRIANGLE</option>
-        <option value="THRESH_TOZERO">THRESH_TOZERO</option>
-        <option value="THRESH_OTSU">THRESH_OTSU</option>
-        <option value="THRESH_ADAPTIVE_MEAN">THRESH_ADAPTIVE_MEAN</option>
-        <option value="THRESH_ADAPTIVE_GAUSSIAN">THRESH_ADAPTIVE_GAUSSIAN</option>
-      </select>
-    </div>
-    <div>
-      Threshold: <input type="range" id="trackbar" value="50" min="0" max="255" step="1" oninput="callback()">
-      <input type="text" id="weightValue" size="3" value="50"/>
-    </div>
-    <div>
-      <button onclick="thresholding()">Tresholding</button>
-    </div>
 
-    
-<script type="text/javascript">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OCR</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+</head>
+
+<body>
+  <div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+      crossorigin="anonymous"></script>
+    <h1>Scan Image</h1>
+    <div class="inputoutput">
+      <img id="imageSrc" alt="No Image" />
+      <div class="caption">imageSrc <input type="file" id="fileInput" name="file" /></div>
+    </div>
+    <div class="inputoutput">
+      <canvas id="canvasOutput"></canvas>
+      <div class="caption">canvasOutput</div>
+    </div>
+    <div>
+      <button id='grayButton' onclick="changeGray_Color()">Change to Gray</button>
+    </div>
+    <div class="inputoutput">
+      <canvas id="threshOutput"></canvas>
+      <div class="caption">threshOutput</div>
+    </div>
+    <div class="inputoutput">
+      <canvas id="blurOutput"></canvas>
+      <div class="caption">blurOutput</div>
+    </div>
+    <div class="inputoutput">
+      <canvas id="testOutput"></canvas>
+      <div class="caption">TEST</div>
+    </div>
+    <button onclick="change()">CHANGE</button>
+  </div>
+
+  <div>
+    Threshold type <select id="thresh_type" name="thresh_type"">
+      <option value=" THRESH_BINARY">THRESH_BINARY</option>
+      <option value="THRESH_BINARY_INV">THRESH_BINARY_INV</option>
+      <option value="THRESH_TRUNC">THRESH_TRUNC</option>
+      <option value="THRESH_TRIANGLE">THRESH_TRIANGLE</option>
+      <option value="THRESH_TOZERO">THRESH_TOZERO</option>
+      <option value="THRESH_OTSU">THRESH_OTSU</option>
+      <option value="THRESH_ADAPTIVE_MEAN">THRESH_ADAPTIVE_MEAN</option>
+      <option value="THRESH_ADAPTIVE_GAUSSIAN">THRESH_ADAPTIVE_GAUSSIAN</option>
+    </select>
+  </div>
+  <div>
+    Threshold: <input type="range" id="trackbar" value="50" min="0" max="255" step="1" oninput="callback()">
+    <input type="text" id="weightValue" size="3" value="50" />
+  </div>
+  <div>
+    Blur option<select id='blur_type'>
+      <option value="BLUR">Blur</option>
+      <option value="GAUSSIAN_BLUR"> Gaussian Blur</option>
+      <option value="MEDIAN_BLUR"> Median Blur</option>
+      <option value="BILATERAL_FILTER">Bilateral Filter</option>
+    </select>
+    <button onclick="type_blur()">BLUR</button>
+  </div>
+
+
+
+  <script type="text/javascript">
     let imgElement = document.getElementById('imageSrc');
     let inputElement = document.getElementById('fileInput');
     inputElement.addEventListener('change', (e) => {
       imgElement.src = URL.createObjectURL(e.target.files[0]);
     }, false);
-
-    let x = document.createElement('INPUT');
-    x.setAttribute('type','range');
-
-   // var threshTypes = {};
-  //  threshTypes['THRESH_BINARY'] = cv.THRESH_BINARY;
-   // threshTypes['THRESH_BINARY_INV'] = cv.THRESH_BINARY_INV;
-   // threshTypes['THRESH_TRUNC'] = cv.THRESH_TRUNC;
-  //  threshTypes['THRESH_TOZERO'] = cv.THRESH_TOZERO;
-  //  threshTypes['THRESH_OTSU'] = cv.THRESH_OTSU;
-  //  threshTypes['THRESH_TRIANGLE'] = cv.THRESH_TRIANGLE;
-   
-    imgElement.onload = function() {
+    let grayed = false;
+    imgElement.onload = function () {
       let mat = cv.imread(imgElement);
       cv.imshow('canvasOutput', mat);
       mat.delete();
     };
 
-    function onOpenCvReady() {
-      document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
+    function type_blur() {
+      let blur_type = document.getElementById('blur_type')
+      let selOpt = blur_type.options[blur_type.selectedIndex].value;
+      if (selOpt == 'BLUR') {
+         blur();
+      }
+      if (selOpt == 'GAUSSIAN_BLUR') {
+         gaussian_blur();
+      }
+      if (selOpt == 'MEDIAN_BLUR') {
+         median_blur();
+      }
+      if (selOpt == 'BILATERAL_FILTER') {
+        bilateral_filter();
+      }
+    };
+    function blur(){
+      let src = cv.imread('canvasOutput');
+      let dst = new cv.Mat();
+      let ksize = new cv.Size(3, 3);
+      let anchor = new cv.Point(-1, -1);
+      cv.blur(src, dst, ksize, anchor, cv.BORDER_DEFAULT);
+      cv.imshow('blurOutput', dst);
+      src.delete(); dst.delete();
     };
 
-    function changeToGray() {  
-      let src = cv.imread('imageSrc');
-      let dst = new cv.Mat(); 
-      cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY,0);
-      cv.imshow('canvasOutput', dst);
-      src.delete();dst.delete(); 
-    };
- 
-    function thresh_binary() {
+    function gaussian_blur(){
       let src = cv.imread('canvasOutput');
       let dst = new cv.Mat();
-      let weightValue = document.getElementById('weightValue');
-      let value = weightValue.getAttribute('value');
-      cv.threshold(src, dst,parseInt(value), 255, cv.THRESH_BINARY);
-      cv.imshow('threshOutput', dst);
-      src.delete();
-      dst.delete();
-    };
-    function thresh_binary_inv(){
-      let src = cv.imread('canvasOutput');
-      let dst = new cv.Mat();
-      let weightValue = document.getElementById('weightValue');
-      let value = weightValue.getAttribute('value');
-      cv.threshold(src, dst,parseInt(value), 255, cv.THRESH_BINARY_INV);
-      cv.imshow('threshOutput', dst);
-      src.delete();
-      dst.delete();
+      let ksize = new cv.Size(3, 3);
+      cv.GaussianBlur(src, dst, ksize, 0, 0, cv.BORDER_DEFAULT);
+      cv.imshow('blurOutput', dst);
+      src.delete(); dst.delete();
     };
 
-    function thresh_trunc(){
+    function median_blur(){
       let src = cv.imread('canvasOutput');
       let dst = new cv.Mat();
-      let weightValue = document.getElementById('weightValue');
-      let value = weightValue.getAttribute('value');
-      cv.threshold(src, dst,parseInt(value), 255, cv.THRESH_TRUNC);
-      cv.imshow('threshOutput', dst);
-      src.delete();
-      dst.delete();   
-    };
-    function thresh_tozero(){
-      let src = cv.imread('canvasOutput');
-      let dst = new cv.Mat();
-      let weightValue = document.getElementById('weightValue');
-      let value = weightValue.getAttribute('value');
-      cv.threshold(src, dst,parseInt(value), 255, cv.THRESH_TOZERO);
-      cv.imshow('threshOutput', dst);
-      src.delete();
-      dst.delete();
-    };
-    function thresh_otsu(){
-      let src = cv.imread('canvasOutput');
-      let dst = new cv.Mat();
-      let gray = new cv.Mat();
-      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY, 0);
-      cv.threshold(gray, gray,0, 255,cv.THRESH_BINARY_INV + cv.THRESH_OTSU);
-      cv.imshow('threshOutput', gray);
-      src.delete();dst.delete();gray.delete();
-    };
-    function thresh_triangle(){
-      let src = cv.imread('canvasOutput');
-      let dst = new cv.Mat();
-      let gray = new cv.Mat();
-      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY, 0);
-      cv.threshold(gray, gray,0, 255, cv.THRESH_BINARY_INV + cv.THRESH_TRIANGLE);
-      cv.imshow('threshOutput', gray);
-      src.delete();dst.delete();gray.delete();
-    };
-    function thresh_adaptive_g(){
-      let src = cv.imread('canvasOutput');
-      let dst = new cv.Mat();
-      let weightValue = document.getElementById('weightValue');
-      let value = weightValue.getAttribute('value');
-      let gray = new cv.Mat();
-      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY, 0);
-      cv.adaptiveThreshold(gray, gray,parseInt(value),cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 3, 2);
-      cv.imshow('threshOutput', gray);
-      src.delete();dst.delete();gray.delete();
-    };
-    function thresh_adaptive_m(){
-      let src = cv.imread('canvasOutput');
-      let dst = new cv.Mat();
-      let weightValue = document.getElementById('weightValue');
-      let value = weightValue.getAttribute('value');
-      let gray = new cv.Mat();
-      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY, 0);
-      cv.adaptiveThreshold(gray, gray,parseInt(value),cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, 3, 2);
-      cv.imshow('threshOutput', gray);
-      src.delete();dst.delete();gray.delete();
+      cv.medianBlur(src, dst, 5);
+      cv.imshow('blurOutput', dst);
+      src.delete(); dst.delete();
     };
 
-    function callback() {
-      let weightValue  = document.getElementById('weightValue');
-      let trackbar = document.getElementById('trackbar');
-      weightValue.setAttribute('value', trackbar.value);
-      let thresh_type = document.getElementById('thresh_type')
-      let selOpt = thresh_type.options[thresh_type.selectedIndex].value;
-      if (selOpt == 'THRESH_BINARY'){
-        thresh_binary();
-      }
-      else if(selOpt == 'THRESH_BINARY_INV'){
-        thresh_binary_inv();
-      }
-      else if(selOpt == 'THRESH_TRUNC'){
-        thresh_trunc();
-      }
-      else if(selOpt == 'THRESH_TOZERO'){
-        thresh_tozero();
-      }
-      else if(selOpt == 'THRESH_OTSU'){
-        thresh_otsu();
-      }
-      else if(selOpt == 'THRESH_TRIANGLE'){
-        thresh_triangle();
-      }
-      else if(selOpt == 'THRESH_ADAPTIVE_GAUSSIAN'){
-        thresh_adaptive_g();
-      }
-      else if(selOpt == 'THRESH_ADAPTIVE_MEAN'){
-        thresh_adaptive_m();
-      }
+    function bilateral_filter(){
+      let src = cv.imread('canvasOutput');
+      let dst = new cv.Mat();
+      cv.cvtColor(src, src, cv.COLOR_RGBA2RGB, 0);
+      cv.bilateralFilter(src, dst, 9, 75, 75, cv.BORDER_DEFAULT);
+      cv.imshow('blurOutput', dst);
+      src.delete(); dst.delete();
     };
 
+    function changeToGray(grayed) {
+      let button = document.getElementById('grayButton');
+      if(grayed == false){
+        let src = cv.imread('imageSrc');       
+        let dst = new cv.Mat();
+        cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY, 0);
+        cv.imshow('canvasOutput', dst);
+        src.delete(); dst.delete();
+        button.textContent = "Change To Color";
+        return true;
+      }
+      else{
+        let src = cv.imread('imageSrc');
+        button.textContent = "Change To Gray";
+        cv.imshow('canvasOutput', src);
+        src.delete();
+        return false;
+      }
+      
+    };
+    function changeGray_Color(){
+        grayed = changeToGray(grayed);
+    };
 
-</script>
-<script async src="/static/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+   // function onOpenCvReady() {
+  //    document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
+   // };
+  </script>
+  <script async src='/static/processing.js' type="application/x-javascript"></script>
+  <script async src="/static/opencv.js" type="application/x-javascript"></script>
+
 </body>
+
 </html>

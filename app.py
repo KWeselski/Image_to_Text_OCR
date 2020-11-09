@@ -13,23 +13,6 @@ app = Flask(__name__)
 app.secret_key = '\xaai\xe42\xf7\xdfEN\x02\x17\x9e\x9b\xcd-\xcf\x0cL\xc4\xbb\xeb\xa4\x10\x06'
 app_dir = os.path.dirname(os.path.abspath(__file__))
 
-def get_grayscale(image):
-    image_ = cv2.cvtColor(np.array(image), cv2.COLOR_RGBA2GRAY)
-    return Image.fromarray(image_)
-# noise removal
-def remove_noise(image):
-    return cv2.medianBlur(np.array(image),5)
-#thresholding
-def thresholding(image):
-    return cv2.threshold(np.array(image),205,255, cv2.THRESH_BINARY)[1]
-#dilation
-def dilate(image):
-    kernel = np.ones((5,5),np.uint8)
-    return cv2.dilate(np.array(image), kernel, iterations = 1)  
-#erosion
-def erode(image):
-    kernel = np.ones((5,5),np.uint8)
-    return cv2.erode(np.array(image), kernel, iterations = 1)
 
 @app.route('/')
 def index():
@@ -60,7 +43,7 @@ def grayscale():
     img = Image.open(destination)
     if img.mode == 'RGB':
         print('Wykonało')
-        img = get_grayscale(img)
+       
     destination = "/".join([file_path, 'temp.png'])
     #if os.path.isfile(destination):
     #    os.remove(destination)
