@@ -222,4 +222,26 @@ function sendImage() {
     image.src = canvas.toDataURL();
     //Element.setAttribute('inp', val);
     input.value = image.src;
-}
+};
+
+function SelectedImg(elem) {
+    var canThresh = document.getElementById('threshOutput');
+    var canBlur = document.getElementById('blurOutput');
+    var canGray = document.getElementById('canvasOutput');
+
+    if (elem == 'threshOutput') {
+        canThresh.classList.add('selected');
+        if (canBlur.classList.contains('selected')){canBlur.classList.remove('selected')}
+        if (canGray.classList.contains('selected')){canGray.classList.remove('selected')}
+    }
+    if (elem == 'canvasOutput') {
+        canGray.classList.add('selected');
+        if (canBlur.classList.contains('selected')){canBlur.classList.remove('selected')}
+        if (canThresh.classList.contains('selected')){canThresh.classList.remove('selected')}
+    }
+    if (elem == 'blurOutput') {
+        canBlur.classList.add('selected');
+        if (canThresh.classList.contains('selected')){canThresh.classList.remove('selected')}
+        if (canGray.classList.contains('selected')){canGray.classList.remove('selected')}
+    }
+};

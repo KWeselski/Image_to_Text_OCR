@@ -13,14 +13,17 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 500px;
+    width: 200px;
 }
 
 h1{
     font-size: 48px;
 }
 
-.inputoutput{
-    max-width:300px;
+img#imageSrc{
+    width: 200px;
 }
 
+.selected {
+    border:8px solid black; 
+}

@@ -23,9 +23,7 @@ def index():
 def scan():
     if request.method == 'POST':
         image = request.form['imageInput']
-        print(image)
         img = Image.open(io.BytesIO(base64.b64decode(image.split(',')[1])))
-
         text = pytesseract.image_to_string(img)
         print(text) 
 
