@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OCR</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+  <link rel="stylesheet" type="text/css" href="/static/style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
     integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 </head>
@@ -19,58 +19,71 @@
       integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
       crossorigin="anonymous"></script>
     <h1>Scan Image</h1>
-    <div class="inputoutput">
-      <img id="imageSrc" alt="No Image" />
-      <div class="caption">imageSrc <input type="file" id="fileInput" name="file" /></div>
+    <div class="row" name='sourceImg'>
+      <div class="inputoutputSrc">
+        <img id="imageSrc" alt="No Image" />
+        <div class="caption">imageSrc <input type="file" id="fileInput" name="file" /></div>
+      </div>
     </div>
-    <div class="inputoutput">
-      <canvas id="canvasOutput"></canvas>
-      <div class="caption">canvasOutput</div>
+    <div class="row">
+      <div class="column" name="column_gray">
+        <div class="inputoutput">
+          <canvas id="canvasOutput"></canvas>
+        </div>
+        <div>
+          <button id='grayButton' onclick="changeGray_Color()">Change to Gray</button>
+        </div>
+      </div>
+      <div class="column" name='column_thresh'>
+        <div class="inputoutput">
+          <canvas id="threshOutput"></canvas>
+        </div>
+        <div>
+          Threshold type <select id="thresh_type" name="thresh_type"">
+          <option value=" THRESH_BINARY">THRESH_BINARY</option>
+            <option value="THRESH_BINARY_INV">THRESH_BINARY_INV</option>
+            <option value="THRESH_TRUNC">THRESH_TRUNC</option>
+            <option value="THRESH_TRIANGLE">THRESH_TRIANGLE</option>
+            <option value="THRESH_TOZERO">THRESH_TOZERO</option>
+            <option value="THRESH_OTSU">THRESH_OTSU</option>
+            <option value="THRESH_ADAPTIVE_MEAN">THRESH_ADAPTIVE_MEAN</option>
+            <option value="THRESH_ADAPTIVE_GAUSSIAN">THRESH_ADAPTIVE_GAUSSIAN</option>
+          </select>
+        </div>
+        <div>
+          Threshold: <input type="range" id="trackbar" value="50" min="0" max="255" step="1" oninput="callback()">
+          <input type="text" id="weightValue" size="3" value="50" />
+        </div>
+      </div>
+      <div class="column" name="column_blur">
+        <div class="inputoutput">
+          <canvas id="blurOutput"></canvas>
+        </div>
+      
+      <div>
+        Select image to blur<select id="image_type">
+          <option value="source">Source Image</option>
+          <option value="thresh">Thresh Image</option>
+        </select>
+      </div>
+      <div>
+        Blur option<select id='blur_type'>
+          <option value="BLUR">Blur</option>
+          <option value="GAUSSIAN_BLUR"> Gaussian Blur</option>
+          <option value="MEDIAN_BLUR"> Median Blur</option>
+          <option value="BILATERAL_FILTER">Bilateral Filter</option>
+        </select>
+        <button onclick="type_blur()">BLUR</button>
+      </div>
     </div>
-    <div>
-      <button id='grayButton' onclick="changeGray_Color()">Change to Gray</button>
-    </div>
-    <div class="inputoutput">
-      <canvas id="threshOutput"></canvas>
-      <div class="caption">threshOutput</div>
-    </div>
-    <div class="inputoutput">
-      <canvas id="blurOutput"></canvas>
-      <div class="caption">blurOutput</div>
-    </div>
-    <div class="inputoutput">
-      <canvas id="testOutput"></canvas>
-      <div class="caption">TEST</div>
-    </div>
-    <button onclick="change()">CHANGE</button>
   </div>
-
-  <div>
-    Threshold type <select id="thresh_type" name="thresh_type"">
-      <option value=" THRESH_BINARY">THRESH_BINARY</option>
-      <option value="THRESH_BINARY_INV">THRESH_BINARY_INV</option>
-      <option value="THRESH_TRUNC">THRESH_TRUNC</option>
-      <option value="THRESH_TRIANGLE">THRESH_TRIANGLE</option>
-      <option value="THRESH_TOZERO">THRESH_TOZERO</option>
-      <option value="THRESH_OTSU">THRESH_OTSU</option>
-      <option value="THRESH_ADAPTIVE_MEAN">THRESH_ADAPTIVE_MEAN</option>
-      <option value="THRESH_ADAPTIVE_GAUSSIAN">THRESH_ADAPTIVE_GAUSSIAN</option>
-    </select>
+    <!--<div class="inputoutput">
+        <canvas id="testOutput"></canvas>
+        <div class="caption">TEST</div>
+      </div>
+      <button onclick="change()">CHANGE</button>
+    </div>  -->
   </div>
-  <div>
-    Threshold: <input type="range" id="trackbar" value="50" min="0" max="255" step="1" oninput="callback()">
-    <input type="text" id="weightValue" size="3" value="50" />
-  </div>
-  <div>
-    Blur option<select id='blur_type'>
-      <option value="BLUR">Blur</option>
-      <option value="GAUSSIAN_BLUR"> Gaussian Blur</option>
-      <option value="MEDIAN_BLUR"> Median Blur</option>
-      <option value="BILATERAL_FILTER">Bilateral Filter</option>
-    </select>
-    <button onclick="type_blur()">BLUR</button>
-  </div>
-
 
 
   <script type="text/javascript">
@@ -89,21 +102,32 @@
     function type_blur() {
       let blur_type = document.getElementById('blur_type')
       let selOpt = blur_type.options[blur_type.selectedIndex].value;
+
+      let img_type = document.getElementById('image_type')
+      let imgOpt = image_type.options[image_type.selectedIndex].value;
+      let src;
+      if (imgOpt == 'source') {
+        src = cv.imread('canvasOutput');
+      }
+      else if (imgOpt == 'thresh') {
+        src = cv.imread('threshOutput');
+      }
+
+
       if (selOpt == 'BLUR') {
-         blur();
+        blur(src);
       }
       if (selOpt == 'GAUSSIAN_BLUR') {
-         gaussian_blur();
+        gaussian_blur(src);
       }
       if (selOpt == 'MEDIAN_BLUR') {
-         median_blur();
+        median_blur(src);
       }
       if (selOpt == 'BILATERAL_FILTER') {
-        bilateral_filter();
+        bilateral_filter(src);
       }
     };
-    function blur(){
-      let src = cv.imread('canvasOutput');
+    function blur(src) {
       let dst = new cv.Mat();
       let ksize = new cv.Size(3, 3);
       let anchor = new cv.Point(-1, -1);
@@ -112,8 +136,7 @@
       src.delete(); dst.delete();
     };
 
-    function gaussian_blur(){
-      let src = cv.imread('canvasOutput');
+    function gaussian_blur(src) {
       let dst = new cv.Mat();
       let ksize = new cv.Size(3, 3);
       cv.GaussianBlur(src, dst, ksize, 0, 0, cv.BORDER_DEFAULT);
@@ -121,16 +144,14 @@
       src.delete(); dst.delete();
     };
 
-    function median_blur(){
-      let src = cv.imread('canvasOutput');
+    function median_blur(src) {
       let dst = new cv.Mat();
       cv.medianBlur(src, dst, 5);
       cv.imshow('blurOutput', dst);
       src.delete(); dst.delete();
     };
 
-    function bilateral_filter(){
-      let src = cv.imread('canvasOutput');
+    function bilateral_filter(src) {
       let dst = new cv.Mat();
       cv.cvtColor(src, src, cv.COLOR_RGBA2RGB, 0);
       cv.bilateralFilter(src, dst, 9, 75, 75, cv.BORDER_DEFAULT);
@@ -140,8 +161,8 @@
 
     function changeToGray(grayed) {
       let button = document.getElementById('grayButton');
-      if(grayed == false){
-        let src = cv.imread('imageSrc');       
+      if (grayed == false) {
+        let src = cv.imread('imageSrc');
         let dst = new cv.Mat();
         cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY, 0);
         cv.imshow('canvasOutput', dst);
@@ -149,17 +170,17 @@
         button.textContent = "Change To Color";
         return true;
       }
-      else{
+      else {
         let src = cv.imread('imageSrc');
         button.textContent = "Change To Gray";
         cv.imshow('canvasOutput', src);
         src.delete();
         return false;
       }
-      
+
     };
-    function changeGray_Color(){
-        grayed = changeToGray(grayed);
+    function changeGray_Color() {
+      grayed = changeToGray(grayed);
     };
 
    // function onOpenCvReady() {

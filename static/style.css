@@ -1,0 +1,26 @@
+.column {
+    flex:10%;
+    padding: 20px;
+    background-color: rgb(203, 216, 205);
+}
+
+.row {
+    display: flex;
+    background-color: rgb(203, 216, 205);
+}
+
+.row[name="sourceImg"] {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+}
+
+h1{
+    font-size: 48px;
+}
+
+.inputoutput{
+    max-width:300px;
+}
+
