@@ -7,9 +7,12 @@
   <link rel="stylesheet" type="text/css" href="/static/style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
     integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-</head>
 
-<body>
+  <script async src="/static/opencv.js" type="application/x-javascript"></script>
+
+  </head>
+
+<body> 
   <div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -40,7 +43,7 @@
         </div>
         <div>
           Threshold type <select id="thresh_type" name="thresh_type"">
-          <option value=" THRESH_BINARY">THRESH_BINARY</option>
+          <option value="THRESH_BINARY">THRESH_BINARY</option>
             <option value="THRESH_BINARY_INV">THRESH_BINARY_INV</option>
             <option value="THRESH_TRUNC">THRESH_TRUNC</option>
             <option value="THRESH_TRIANGLE">THRESH_TRIANGLE</option>
@@ -59,137 +62,31 @@
         <div class="inputoutput">
           <canvas id="blurOutput"></canvas>
         </div>
-      
-      <div>
-        Select image to blur<select id="image_type">
-          <option value="source">Source Image</option>
-          <option value="thresh">Thresh Image</option>
-        </select>
-      </div>
-      <div>
-        Blur option<select id='blur_type'>
-          <option value="BLUR">Blur</option>
-          <option value="GAUSSIAN_BLUR"> Gaussian Blur</option>
-          <option value="MEDIAN_BLUR"> Median Blur</option>
-          <option value="BILATERAL_FILTER">Bilateral Filter</option>
-        </select>
-        <button onclick="type_blur()">BLUR</button>
+
+        <div>
+          Select image to blur<select id="image_type">
+            <option value="source">Source Image</option>
+            <option value="thresh">Thresh Image</option>
+          </select>
+        </div>
+        <div>
+          Blur option<select id='blur_type'>
+            <option value="BLUR">Blur</option>
+            <option value="GAUSSIAN_BLUR"> Gaussian Blur</option>
+            <option value="MEDIAN_BLUR"> Median Blur</option>
+            <option value="BILATERAL_FILTER">Bilateral Filter</option>
+          </select>
+          <button onclick="type_blur()">BLUR</button>
+        </div>
       </div>
     </div>
+    <div>
+      <form action="{{url_for('scan')}}" method="POST" enctype="multipart/form-data">
+          <input type="submit" name='imageInput' id='imageInput' onclick="sendImage()">
+      </form>
+    </div>
+    <script src="/static/processing.js" type="text/javascript"></script>
   </div>
-    <!--<div class="inputoutput">
-        <canvas id="testOutput"></canvas>
-        <div class="caption">TEST</div>
-      </div>
-      <button onclick="change()">CHANGE</button>
-    </div>  -->
-  </div>
-
-
-  <script type="text/javascript">
-    let imgElement = document.getElementById('imageSrc');
-    let inputElement = document.getElementById('fileInput');
-    inputElement.addEventListener('change', (e) => {
-      imgElement.src = URL.createObjectURL(e.target.files[0]);
-    }, false);
-    let grayed = false;
-    imgElement.onload = function () {
-      let mat = cv.imread(imgElement);
-      cv.imshow('canvasOutput', mat);
-      mat.delete();
-    };
-
-    function type_blur() {
-      let blur_type = document.getElementById('blur_type')
-      let selOpt = blur_type.options[blur_type.selectedIndex].value;
-
-      let img_type = document.getElementById('image_type')
-      let imgOpt = image_type.options[image_type.selectedIndex].value;
-      let src;
-      if (imgOpt == 'source') {
-        src = cv.imread('canvasOutput');
-      }
-      else if (imgOpt == 'thresh') {
-        src = cv.imread('threshOutput');
-      }
-
-
-      if (selOpt == 'BLUR') {
-        blur(src);
-      }
-      if (selOpt == 'GAUSSIAN_BLUR') {
-        gaussian_blur(src);
-      }
-      if (selOpt == 'MEDIAN_BLUR') {
-        median_blur(src);
-      }
-      if (selOpt == 'BILATERAL_FILTER') {
-        bilateral_filter(src);
-      }
-    };
-    function blur(src) {
-      let dst = new cv.Mat();
-      let ksize = new cv.Size(3, 3);
-      let anchor = new cv.Point(-1, -1);
-      cv.blur(src, dst, ksize, anchor, cv.BORDER_DEFAULT);
-      cv.imshow('blurOutput', dst);
-      src.delete(); dst.delete();
-    };
-
-    function gaussian_blur(src) {
-      let dst = new cv.Mat();
-      let ksize = new cv.Size(3, 3);
-      cv.GaussianBlur(src, dst, ksize, 0, 0, cv.BORDER_DEFAULT);
-      cv.imshow('blurOutput', dst);
-      src.delete(); dst.delete();
-    };
-
-    function median_blur(src) {
-      let dst = new cv.Mat();
-      cv.medianBlur(src, dst, 5);
-      cv.imshow('blurOutput', dst);
-      src.delete(); dst.delete();
-    };
-
-    function bilateral_filter(src) {
-      let dst = new cv.Mat();
-      cv.cvtColor(src, src, cv.COLOR_RGBA2RGB, 0);
-      cv.bilateralFilter(src, dst, 9, 75, 75, cv.BORDER_DEFAULT);
-      cv.imshow('blurOutput', dst);
-      src.delete(); dst.delete();
-    };
-
-    function changeToGray(grayed) {
-      let button = document.getElementById('grayButton');
-      if (grayed == false) {
-        let src = cv.imread('imageSrc');
-        let dst = new cv.Mat();
-        cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY, 0);
-        cv.imshow('canvasOutput', dst);
-        src.delete(); dst.delete();
-        button.textContent = "Change To Color";
-        return true;
-      }
-      else {
-        let src = cv.imread('imageSrc');
-        button.textContent = "Change To Gray";
-        cv.imshow('canvasOutput', src);
-        src.delete();
-        return false;
-      }
-
-    };
-    function changeGray_Color() {
-      grayed = changeToGray(grayed);
-    };
-
-   // function onOpenCvReady() {
-  //    document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
-   // };
-  </script>
-  <script async src='/static/processing.js' type="application/x-javascript"></script>
-  <script async src="/static/opencv.js" type="application/x-javascript"></script>
-
 </body>
 
 </html>
