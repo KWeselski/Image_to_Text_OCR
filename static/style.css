@@ -1,29 +1,32 @@
 .column {
     flex:10%;
     padding: 20px;
-    background-color: rgb(203, 216, 205);
+    background-color: rgb(101, 194, 223);
 }
 
 .row {
     display: flex;
-    background-color: rgb(203, 216, 205);
-}
-
-.row[name="sourceImg"] {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 200px;
+    background-color: rgb(162, 233, 255);
 }
 
 h1{
     font-size: 48px;
 }
 
-img#imageSrc{
-    width: 200px;
-}
-
 .selected {
     border:8px solid black; 
+}
+
+.imgBoxSelection{
+    width:33%;
+}
+
+
+.container {
+    width: 760px;
+    height: 500px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-color:  rgb(162, 233, 255);
 }

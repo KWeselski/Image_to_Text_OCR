@@ -22,7 +22,7 @@ function type_blur() {
     let blur_type = document.getElementById('blur_type')
     let selOpt = blur_type.options[blur_type.selectedIndex].value;
 
-    let img_type = document.getElementById('image_type')
+    let image_type = document.getElementById('image_type')
     let imgOpt = image_type.options[image_type.selectedIndex].value;
     let src;
     if (imgOpt == 'source') {
@@ -231,17 +231,22 @@ function SelectedImg(elem) {
 
     if (elem == 'threshOutput') {
         canThresh.classList.add('selected');
-        if (canBlur.classList.contains('selected')){canBlur.classList.remove('selected')}
-        if (canGray.classList.contains('selected')){canGray.classList.remove('selected')}
+        if (canBlur.classList.contains('selected')) { canBlur.classList.remove('selected') }
+        if (canGray.classList.contains('selected')) { canGray.classList.remove('selected') }
     }
     if (elem == 'canvasOutput') {
         canGray.classList.add('selected');
-        if (canBlur.classList.contains('selected')){canBlur.classList.remove('selected')}
-        if (canThresh.classList.contains('selected')){canThresh.classList.remove('selected')}
+        if (canBlur.classList.contains('selected')) { canBlur.classList.remove('selected') }
+        if (canThresh.classList.contains('selected')) { canThresh.classList.remove('selected') }
     }
     if (elem == 'blurOutput') {
         canBlur.classList.add('selected');
-        if (canThresh.classList.contains('selected')){canThresh.classList.remove('selected')}
-        if (canGray.classList.contains('selected')){canGray.classList.remove('selected')}
+        if (canThresh.classList.contains('selected')) { canThresh.classList.remove('selected') }
+        if (canGray.classList.contains('selected')) { canGray.classList.remove('selected') }
     }
 };
+
+function downloadImage(){
+    let canvas = document.getElementsByClassName('selected');
+    canvas[0].toBlob(function(blob){saveAs(blob,"process_img.png");},'image/png');   
+  };

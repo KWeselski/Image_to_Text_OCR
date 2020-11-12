@@ -10,9 +10,9 @@
 
   <script async src="/static/opencv.js" type="application/x-javascript"></script>
 
-  </head>
+</head>
 
-<body> 
+<body>
   <div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -22,73 +22,83 @@
       integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
       crossorigin="anonymous"></script>
     <h1>Scan Image</h1>
-    <div class="row" name='sourceImg'>
-      <div class="inputoutputSrc">
-        <img id="imageSrc" alt="No Image" />
-        <div class="caption">imageSrc <input type="file" id="fileInput" name="file" /></div>
-      </div>
-    </div>
     <div class="row">
-      <div class="column" name="column_gray">
-        <div class="inputoutput">
-          <canvas id="canvasOutput" onclick="SelectedImg('canvasOutput')" class="imgBoxSelection"></canvas>
-        </div>
-        <div>
-          <button id='grayButton' onclick="changeGray_Color()">Change to Gray</button>
+      <div class="column" name="column_source">
+        <div class="inputoutputSrc">
+          <img id="imageSrc" alt="No Image" class="container" />
+          <div class="caption">Add Image for processing<input type="file" id="fileInput" name="file" /></div>
         </div>
       </div>
-      <div class="column" name='column_thresh'>
-        <div class="inputoutput">
-          <canvas id="threshOutput" onclick="SelectedImg('threshOutput')" class="imgBoxSelection"></canvas>
+
+      <div class="column" name="column_process">
+        <div class="row">
+          <div class="inputoutput">
+            <canvas id="threshOutput" onclick="SelectedImg('threshOutput')" class="imgBoxSelection"></canvas>
+          </div>
+          <div>
+            Threshold type <select id="thresh_type" name="thresh_type">
+              <option value="THRESH_BINARY">THRESH_BINARY</option>
+              <option value="THRESH_BINARY_INV">THRESH_BINARY_INV</option>
+              <option value="THRESH_TRUNC">THRESH_TRUNC</option>
+              <option value="THRESH_TRIANGLE">THRESH_TRIANGLE</option>
+              <option value="THRESH_TOZERO">THRESH_TOZERO</option>
+              <option value="THRESH_OTSU">THRESH_OTSU</option>
+              <option value="THRESH_ADAPTIVE_MEAN">THRESH_ADAPTIVE_MEAN</option>
+              <option value="THRESH_ADAPTIVE_GAUSSIAN">THRESH_ADAPTIVE_GAUSSIAN</option>
+            </select>
+          </div>
+          <div>
+            Threshold: <input type="range" id="trackbar" value="50" min="0" max="255" step="1" oninput="callback()">
+            <input type="text" id="weightValue" size="3" value="50" />
+          </div>
         </div>
-        <div>
-          Threshold type <select id="thresh_type" name="thresh_type"">
-          <option value="THRESH_BINARY">THRESH_BINARY</option>
-            <option value="THRESH_BINARY_INV">THRESH_BINARY_INV</option>
-            <option value="THRESH_TRUNC">THRESH_TRUNC</option>
-            <option value="THRESH_TRIANGLE">THRESH_TRIANGLE</option>
-            <option value="THRESH_TOZERO">THRESH_TOZERO</option>
-            <option value="THRESH_OTSU">THRESH_OTSU</option>
-            <option value="THRESH_ADAPTIVE_MEAN">THRESH_ADAPTIVE_MEAN</option>
-            <option value="THRESH_ADAPTIVE_GAUSSIAN">THRESH_ADAPTIVE_GAUSSIAN</option>
-          </select>
-        </div>
-        <div>
-          Threshold: <input type="range" id="trackbar" value="50" min="0" max="255" step="1" oninput="callback()">
-          <input type="text" id="weightValue" size="3" value="50" />
-        </div>
-      </div>
-      <div class="column" name="column_blur">
-        <div class="inputoutput">
-          <canvas id="blurOutput" onclick="SelectedImg('blurOutput')" class="imgBoxSelection"></canvas>
+        <div class="row">
+          <div class="inputoutput">
+            <canvas id="canvasOutput" onclick="SelectedImg('canvasOutput')" class="imgBoxSelection"></canvas>
+          </div>
+          <div>
+            <button id='grayButton' onclick="changeGray_Color()">Change to Gray</button>
+          </div>
         </div>
 
-        <div>
-          Select image to blur<select id="image_type">
-            <option value="source">Source Image</option>
-            <option value="thresh">Thresh Image</option>
-          </select>
-        </div>
-        <div>
-          Blur option<select id='blur_type'>
-            <option value="BLUR">Blur</option>
-            <option value="GAUSSIAN_BLUR"> Gaussian Blur</option>
-            <option value="MEDIAN_BLUR"> Median Blur</option>
-            <option value="BILATERAL_FILTER">Bilateral Filter</option>
-          </select>
-          <button onclick="type_blur()">BLUR</button>
+        <div class="row">
+          <div class="inputoutput">
+            <canvas id="blurOutput" onclick="SelectedImg('blurOutput')" class="imgBoxSelection"></canvas>
+          </div>
+          <div>Select image to blur
+            <select id="image_type">
+              <option value="source">Source Image</option>
+              <option value="thresh">Thresh Image</option>
+            </select>
+          </div>
+          <div>Blur option
+            <select id='blur_type'>
+              <option value="BLUR">Blur</option>
+              <option value="GAUSSIAN_BLUR"> Gaussian Blur</option>
+              <option value="MEDIAN_BLUR"> Median Blur</option>
+              <option value="BILATERAL_FILTER">Bilateral Filter</option>
+            </select>
+            <button onclick="type_blur()">BLUR</button>
+          </div>
         </div>
       </div>
     </div>
+    
     <div>
       <form action="{{url_for('scan')}}" method="POST" enctype="multipart/form-data">
-          <input type="submit" name='imageInput' id='imageInput' onclick="sendImage()">
+        <input type="submit" name='imageInput' id='imageInput' onclick="sendImage()">
       </form>
     </div>
+    <script>
+      
+    </script>
+    <script src="/static/Filesaver.js" type="text/javascript"></script>
+    <script src="/static/canvas-to-blob.min.js"></script>
     <script src="/static/processing.js" type="text/javascript"></script>
+
   </div>
   <div>
-    Image to Save <section ></section>
+    <button onclick="downloadImage()">Save File</button>
   </div>
 </body>
 
