@@ -1,1 +1,10 @@
-# Text_to_braille_OCR
+# Image to Ocr
+
+A simple web application for image processing and text recognition from an image. Application for text recognition uses pytesseract library.
+
+ Main used library:
+ * Flask
+ * Opencv.js
+ * Filesaver.js
+ * pytesseract
+
