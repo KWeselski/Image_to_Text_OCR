@@ -1,32 +1,113 @@
-.column {
-    flex:10%;
-    padding: 20px;
-    background-color: rgb(101, 194, 223);
+.grid-container{
+    display: grid;
+    grid-template-columns: 3fr 1.5fr 3fr;
+    grid-template-rows: repeat(4,1fr);
+    height: 100%;
+    color: #000000;
+    font-family:'Raleway',sans-serif; 
+    text-transform: uppercase;
+    font-size: 24px;
+    font-weight: 800;
+    background-color: rgb(122, 241, 230);
 }
 
-.row {
-    display: flex;
-    background-color: rgb(162, 233, 255);
+.box1 {
+    position: relative;
+    grid-row: 1/ 4;
+    text-align: center;
+    z-index: 3;
 }
 
-h1{
-    font-size: 48px;
+.box2 {
+    position: relative;
+    grid-column: 2/3;
+    grid-row: 1/5;
+    background-color: rgb(6, 162, 235);
+
+}
+.box4 {
+    position: relative;
+    grid-row: 4/5;
+    grid-column: 1/2;
+    z-index: 3;
+
+}
+.box3 {
+    position: relative;
+    grid-column: 3/4;
+    grid-row: 1/5;
+    z-index: 3;
+}
+
+.box6 {
+    position: absolute;
+    top:85%;
+    background-color: whitesmoke;
+    width: 100%;
+    height: 100px;
+    z-index: 1;
+    opacity: 1;
+}
+.box5 {
+    position: absolute;
+    top:5%;
+    background-color: whitesmoke;
+    width: 100%;
+    height: 100px;
+    z-index: 1;
+    opacity: 1;
+}
+
+.box1 > div.inputoutputSrc{
+    position: relative;
+    margin-top: 5%;
+    border: 5px solid black;
+    height: 600px;
+    width: 100%;
+  
+}
+
+.inputoutputSrc img{
+    width: 100%;
+    object-fit: contain;
+    height: 100%;
+}
+
+.box2 > div:nth-child(1){
+    position: relative;
+    top:10%;
+    left:10%;
+    font-size: 22px;
+    z-index: 3;  
+}
+.box2 > div:nth-child(2){
+    position: relative;
+    top:35%;
+    left:30%;
+     z-index: 3;
+}
+.box2 > div:nth-child(3){
+    position: relative;
+    top:60%;
+    left:7%;
+    font-size: 22px;
+    z-index: 3;
+
 }
 
 .selected {
-    border:8px solid black; 
+    border:4px solid black; 
 }
+
+
 
 .imgBoxSelection{
-    width:33%;
+    position: relative;
+    width: 100%;
+    object-fit: contain;
+    height: 33%;
 }
-
-
-.container {
-    width: 760px;
-    height: 500px;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-    background-color:  rgb(162, 233, 255);
+.resultHeader{
+    background-color: red;
+    font-size: 30px;
 }

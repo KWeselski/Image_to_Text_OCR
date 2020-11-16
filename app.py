@@ -3,7 +3,6 @@ from flask import Flask, request, render_template, redirect, url_for, session ,s
 from PIL import Image
 import cv2
 import pytesseract
-import imutils
 import datetime
 import numpy as np
 import io

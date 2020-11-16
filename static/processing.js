@@ -220,7 +220,6 @@ function sendImage() {
     let canvas = document.getElementById('threshOutput');
     let input = document.getElementById('imageInput');
     image.src = canvas.toDataURL();
-    //Element.setAttribute('inp', val);
     input.value = image.src;
 };
 
@@ -228,7 +227,7 @@ function SelectedImg(elem) {
     var canThresh = document.getElementById('threshOutput');
     var canBlur = document.getElementById('blurOutput');
     var canGray = document.getElementById('canvasOutput');
-
+    var btn = document.getElementById('btnDownload');
     if (elem == 'threshOutput') {
         canThresh.classList.add('selected');
         if (canBlur.classList.contains('selected')) { canBlur.classList.remove('selected') }
@@ -244,9 +243,13 @@ function SelectedImg(elem) {
         if (canThresh.classList.contains('selected')) { canThresh.classList.remove('selected') }
         if (canGray.classList.contains('selected')) { canGray.classList.remove('selected') }
     }
+
+    btn.disabled=false;
 };
 
 function downloadImage(){
     let canvas = document.getElementsByClassName('selected');
     canvas[0].toBlob(function(blob){saveAs(blob,"process_img.png");},'image/png');   
   };
+
+
