@@ -8,3 +8,7 @@ A simple web application for image processing and text recognition from an image
  * Filesaver.js
  * pytesseract
 
+# Sample:
+![Screen](image_test.PNG )
+<b>Result:</b>
+![Screen1](image_test2.PNG)
