@@ -1,7 +1,15 @@
-{% include "index.html" %}
-{%block body%}
-    <header class="resultHeader">Result text:</header>
-    <div style="background-color: red;">
+<html>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <body class='grid-container'>
+    <div>
+    <p style="font-size: 48px;">Result text:</p>
     {{text}}
     </div>
-{%endblock body %}
+    <div>
+        <form action="{{url_for('index')}}">
+            <input type="submit" class="myButton" value="Return"/>
+          </form>
+    </div>
+    </body>
+</html>
+    

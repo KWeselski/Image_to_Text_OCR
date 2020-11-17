@@ -251,5 +251,3 @@ function downloadImage(){
     let canvas = document.getElementsByClassName('selected');
     canvas[0].toBlob(function(blob){saveAs(blob,"process_img.png");},'image/png');   
   };
-
-
