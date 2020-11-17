@@ -27,7 +27,7 @@
         <img id="imageSrc" alt="No Image" class="container" />   
       </div>
       <div class="caption">Add Image for processing
-        <input type="button" value="Load Image" class="btn btn-lg btn-primary" onclick="document.getElementById('fileInput').click();"/>
+        <input type="button" value="Load Image" class="myButton" onclick="document.getElementById('fileInput').click();"/>
         <input type="file" id="fileInput" name="file" style="display: none;" /></div>
       </div>
       <div class="box box2">
@@ -52,7 +52,7 @@
       </div>
       <div id="box2-row2">
         <div>
-          <button id='grayButton' class="btn btn-lg btn-primary" onclick="changeGray_Color()">Change to Gray</button>
+          <button id='grayButton' class="myButton" onclick="changeGray_Color()">Change to Gray</button>
         </div>
       </div>
       <div id="box2-row3">
@@ -69,7 +69,7 @@
             <option value="MEDIAN_BLUR"> Median Blur</option>
             <option value="BILATERAL_FILTER">Bilateral Filter</option>
           </select>
-          <button class="btn btn-lg btn-primary" onclick="type_blur()">BLUR</button>
+          <button id="blurButton" class="myButton" onclick="type_blur()">BLUR</button>
         </div>
       </div>
       </div>
@@ -92,17 +92,12 @@
       </div>
       <div class="box box4">
       <form action="{{url_for('scan')}}"  method="POST" enctype="multipart/form-data">
-        <input type="submit" class="btn btn-lg btn-primary" name='imageInput' id='imageInput' onclick="sendImage()">
+        <input type="submit" class="myButton" name='imageInput' id='imageInput' onclick="sendImage()">
       </form>
       <div>
-        <button class="btn btn-lg btn-primary" onclick="downloadImage()">Save File</button>
+        <button id="saveButton" class="myButton" onclick="downloadImage()">Save File</button>
       </div>
       </div>
-      <div class="box box5">
-
-      </div>
-      <div class="box box6">
-
       </div>
     </div>
 
