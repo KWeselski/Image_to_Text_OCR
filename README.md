@@ -8,6 +8,10 @@ A simple web application for image processing and text recognition from an image
  * Filesaver.js
  * pytesseract
 
+# Change tesseract path
+    tesseract_dir = 'your own path'
+
+
 # Sample:
 ![Screen](image_test.PNG )
 <b>Result:</b>
