@@ -13,6 +13,8 @@ app = Flask(__name__)
 app.secret_key = '\xaai\xe42\xf7\xdfEN\x02\x17\x9e\x9b\xcd-\xcf\x0cL\xc4\xbb\xeb\xa4\x10\x06'
 app_dir = os.path.dirname(os.path.abspath(__file__))
 
+"""Change to your own path"""
+tesseract_dir = 'D:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe'
 
 @app.route('/')
 def index():
@@ -45,5 +47,5 @@ def result():
         return "Error"
 
 if __name__ == '__main__':
-    pytesseract.pytesseract.tesseract_cmd = 'D:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe'
+    pytesseract.pytesseract.tesseract_cmd = tesseract_dir
     app.run(debug=True)

@@ -224,10 +224,11 @@ function sendImage() {
 };
 
 function SelectedImg(elem) {
-    var canThresh = document.getElementById('threshOutput');
-    var canBlur = document.getElementById('blurOutput');
-    var canGray = document.getElementById('canvasOutput');
-    var btn = document.getElementById('btnDownload');
+    let canThresh = document.getElementById('threshOutput');
+    let canBlur = document.getElementById('blurOutput');
+    let canGray = document.getElementById('canvasOutput');
+    let btn = document.getElementById('saveButton');
+    let btnTxt = document.getElementById('imageInput');
     if (elem == 'threshOutput') {
         canThresh.classList.add('selected');
         if (canBlur.classList.contains('selected')) { canBlur.classList.remove('selected') }
@@ -245,6 +246,7 @@ function SelectedImg(elem) {
     }
 
     btn.disabled=false;
+    btnTxt.disabled=false;
 };
 
 function downloadImage(){

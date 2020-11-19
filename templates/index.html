@@ -24,7 +24,9 @@
       <div class="caption">Add Image for processing
         <input type="button" value="Load Image" class="myButton" onclick="document.getElementById('fileInput').click();"/>
         <input type="file" id="fileInput" name="file" style="display: none;" /></div>
+        <p id="selectText">Select image on the right for save or text recognition</p>
       </div>
+      
       <div class="box box2">
         <div id="box2-row1">
         <div class='custom-dropdown'>
@@ -87,12 +89,14 @@
       </div>
       <div class="box box4">
       <form action="{{url_for('scan')}}"  method="POST" enctype="multipart/form-data">
-        <input type="submit" class="myButton" name='imageInput' id='imageInput' onclick="sendImage()" value="Get text from image">
+        <input type="submit" class="myButton" name='imageInput' id='imageInput' onclick="sendImage()" value="Get text from image" disabled=true>
       </form>
       <div>
-        <button id="saveButton" class="myButton" onclick="downloadImage()">Save File</button>
+        <button id="saveButton" class="myButton" onclick="downloadImage()" disabled=true>Save File</button>
       </div>
+      
       </div>
+      
       </div>
     </div>
   </div>
