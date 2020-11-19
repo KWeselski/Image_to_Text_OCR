@@ -219,8 +219,9 @@ function sendImage() {
     let image = new Image();
     let canvas = document.getElementById('threshOutput');
     let input = document.getElementById('imageInput');
+    input.classList.add('hidden')
     image.src = canvas.toDataURL();
-    input.value = image.src;
+    input.value = image.src;   
 };
 
 function SelectedImg(elem) {
